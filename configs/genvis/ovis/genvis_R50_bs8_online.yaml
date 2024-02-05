@@ -2,6 +2,7 @@ _BASE_: ../../vita/ovis/vita_R50_bs8.yaml
 MODEL:
   META_ARCHITECTURE: "Genvis"
   WEIGHTS: "vita_r50_ovis.pth"
+  # WEIGHTS: "./genvis_r50_w1_ovis.pth"
   VITA:
     ENC_WINDOW_SIZE: 0
     FREEZE_DETECTOR: True
@@ -12,7 +13,7 @@ DATASETS:
   TRAIN: ("coco2ovis_train", "ovis_train")
   TEST: ("ovis_val",)
 SOLVER:
-  IMS_PER_BATCH: 8
+  IMS_PER_BATCH: 2
   STEPS: (100000,)
   MAX_ITER: 140000
   CHECKPOINT_PERIOD: 5000
@@ -22,7 +23,7 @@ INPUT:
   SAMPLING_FRAME_SHUFFLE: False
 DATALOADER:
   FILTER_EMPTY_ANNOTATIONS: True
-  NUM_WORKERS: 8
+  NUM_WORKERS: 2
 TEST:
   EVAL_PERIOD: 0
-  DETECTIONS_PER_IMAGE: 20
+  DETECTIONS_PER_IMAGE: 10

@@ -33,7 +33,7 @@ from detectron2.evaluation import (
     print_csv_format,
     verify_results,
 )
-from detectron2.projects.deeplab import add_deeplab_config, build_lr_scheduler
+from .detectron2.projects.DeepLab.deeplab import add_deeplab_config, build_lr_scheduler
 from detectron2.solver.build import maybe_add_gradient_clipping
 from detectron2.utils.logger import setup_logger
 

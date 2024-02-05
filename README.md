@@ -1,22 +1,44 @@
-# A Generalized Framework for Video Instance Segmentation (CVPR 2023)
-[Miran Heo](https://sites.google.com/view/miranheo), [Sukjun Hwang](https://sukjunhwang.github.io), [Jeongseok Hyun](https://sites.google.com/view/jshyun/home), [Hanjung Kim](https://kimhanjung.github.io), [Seoung Wug Oh](https://sites.google.com/view/seoungwugoh), [Joon-Young Lee](https://joonyoung-cv.github.io), [Seon Joo Kim](https://sites.google.com/site/seonjookim/home)
+# 基于遮挡视频实例分割的裸眼3D实现
 
-[[`arXiv`](https://arxiv.org/abs/2211.08834)] [[`BibTeX`](#CitingGenVIS)]
+## 项目简介
 
-<div align="center">
-  <img src="https://user-images.githubusercontent.com/24949098/212600182-90721a1e-aa4c-452c-86ed-ab1149a16b8f.gif"  width="30%"/>
-  <img src="https://user-images.githubusercontent.com/24949098/212599620-082b9604-49f1-4f21-bf8e-01885cd38e82.gif"  width="30%"/>
+本项目基于[GenVIS模型](https://github.com/miranheo/GenVIS)实现了裸眼3D的效果，使用模型为OVIS训练集上训练的模型。
 
-  <img src="https://user-images.githubusercontent.com/24949098/213493785-27312f33-dbae-4d44-8036-69e597366ab9.gif"  width="60%"/>
-</div><br/>
+在原项目的基础上，修改部分代码使其在Python3.10版本中运行。
 
-## Updates
-* **`Feb 28, 2023`:** GenVIS is accepted to CVPR 2023!
-* **`Jan 20, 2023`:** Code is now available!
+关于裸眼3D的部分，主要代码分为以下部分：
 
-## Installation
-GenVIS is built upon VITA.
-See [installation instructions](https://github.com/sukjunhwang/VITA/blob/main/INSTALL.md).
+1. `demo/autostereoscopy.py`文件中实现视频的输入和输出。
+2. `demo/predictor.py`文件中增加裸眼3D的适配。
+3. `demo/visualizer.py`文件中实现方法`draw_autostereoscopy`，用于绘制裸眼3D的必要边框。
+
+## 环境配置
+
+原项目环境配置可参考：[installation instructions](https://github.com/sukjunhwang/VITA/blob/main/INSTALL.md).
+
+我使用的环境为docker，配置方式如下：
+
+```shell
+docker pull pytorch/pytorch:2.2.0-cuda12.1-cudnn8-devel
+
+docker run --name pytorch2 --gpus all --privileged -v $PWD/conda:/home/condashare -dt -e NVIDIA_DRIVER_CAPABILITIES=compute,utility -e NVIDIA_VISIBLE_DEVICES=all --shm-size 8G pytorch/pytorch:2.2.0-cuda12.1-cudnn8-devel
+```
+
+在这里我是将Windows上的一个目录挂载到容器中，后续需要在这个文件夹中克隆仓库，这样方便查看输出。
+
+之后按照原项目的配置方式即可，注意python版本的区别，在后续需要克隆detectron2仓库，该项目的`setup.cfg`文件中使用的版本为3.7，需要修改为3.10。
+
+## 运行方式
+
+运行方式如下：
+
+```shell
+CUDA_VISIBLE_DEVICES=0 python demo/autostereoscopy.py --config-file configs/genvis/ovis/genvis_R50_bs8_online.yaml --video-input /path/to/video --output /path/to/output --opts MODEL.WEIGHTS /path/to/checkpoint_file
+```
+
+这里需要给出单个路径，视频路径、输出文件夹路径和模型路径。
+
+以下为原项目的部分README。
 
 ## Getting Started
 
@@ -71,26 +93,3 @@ The majority of GenVIS is licensed under a
 [Apache-2.0 License](LICENSE).
 However portions of the project are available under separate license terms: Detectron2([Apache-2.0 License](https://github.com/facebookresearch/detectron2/blob/main/LICENSE)), IFC([Apache-2.0 License](https://github.com/sukjunhwang/IFC/blob/master/LICENSE)), Mask2Former([MIT License](https://github.com/facebookresearch/Mask2Former/blob/main/LICENSE)), Deformable-DETR([Apache-2.0 License](https://github.com/fundamentalvision/Deformable-DETR/blob/main/LICENSE)), and VITA([Apache-2.0 License](https://github.com/sukjunhwang/VITA/blob/main/LICENSE)).
 
-## <a name="CitingGenVIS"></a>Citing GenVIS
-
-If you use GenVIS in your research or wish to refer to the baseline results published in the Model Zoo, please use the following BibTeX entry.
-
-```BibTeX
-@inproceedings{GenVIS,
-  title={A Generalized Framework for Video Instance Segmentation},
-  author={Heo, Miran and Hwang, Sukjun and Hyun, Jeongseok and Kim, Hanjung and Oh, Seoung Wug and Lee, Joon-Young and Kim, Seon Joo},
-  booktitle={CVPR},
-  year={2023}
-}
-
-@inproceedings{VITA,
-  title={VITA: Video Instance Segmentation via Object Token Association},
-  author={Heo, Miran and Hwang, Sukjun and Oh, Seoung Wug and Lee, Joon-Young and Kim, Seon Joo},
-  booktitle={Advances in Neural Information Processing Systems},
-  year={2022}
-}
-```
-
-## Acknowledgement
-
-Our code is largely based on [Detectron2](https://github.com/facebookresearch/detectron2), [IFC](https://github.com/sukjunhwang/IFC), [Mask2Former](https://github.com/facebookresearch/MaskFormer), [Deformable DETR](https://github.com/fundamentalvision/Deformable-DETR), and [VITA](https://github.com/sukjunhwang/VITA). We are truly grateful for their excellent work.

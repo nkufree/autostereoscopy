@@ -30,6 +30,8 @@ class VisualizationDemo(object):
         )
         self.cpu_device = torch.device("cpu")
         self.instance_mode = instance_mode
+        self.last_frame = None
+        self.last_black_mask = None
 
         self.parallel = parallel
         if parallel:
@@ -39,7 +41,7 @@ class VisualizationDemo(object):
             self.predictor = VideoPredictor(cfg)
         self.conf_thres = conf_thres
 
-    def run_on_video(self, frames):
+    def run_on_video(self, frames, mode='usual'):
         """
         Args:
             frames (List[np.ndarray]): a list of images of shape (H, W, C) (in BGR order).
@@ -67,14 +69,18 @@ class VisualizationDemo(object):
         total_vis_output = []
         for frame_idx in range(len(frames)):
             frame = frames[frame_idx][:, :, ::-1]
-            visualizer = TrackVisualizer(frame, self.metadata, instance_mode=self.instance_mode)
+            visualizer = TrackVisualizer(frame, self.metadata, instance_mode=self.instance_mode,
+                                         last_frame=self.last_frame,
+                                         last_black_mask=self.last_black_mask)
             ins = Instances(image_size)
             if len(pred_scores) > 0:
                 ins.scores = pred_scores
                 ins.pred_classes = pred_labels
                 ins.pred_masks = torch.stack(frame_masks[frame_idx], dim=0)
-
-            vis_output = visualizer.draw_instance_predictions(predictions=ins)
+            if mode == 'usual':
+                vis_output = visualizer.draw_instance_predictions(predictions=ins)
+            elif mode == '3d':
+                vis_output, self.last_frame, self.last_black_mask = visualizer.draw_autostereoscopy(predictions=ins)
             total_vis_output.append(vis_output)
 
         return predictions, total_vis_output

@@ -53,3 +53,8 @@ _darcs
 /snippet
 
 detectron2
+
+mydata
+
+*.log
+

@@ -154,14 +154,16 @@ if __name__ == "__main__":
 
     elif args.video_input:
         video = cv2.VideoCapture(args.video_input)
-        
+        i = -1
         vid_frames = []
         while video.isOpened():
+            i += 1
             success, frame = video.read()
-            if success:
+            if success and i < 50:
                 vid_frames.append(frame)
             else:
                 break
+            
 
         start_time = time.time()
         with autocast():
@@ -183,7 +185,7 @@ if __name__ == "__main__":
             cap = cv2.VideoCapture(-1)
             fourcc = cv2.VideoWriter_fourcc(*"mp4v")
             out = cv2.VideoWriter(os.path.join(args.output, "visualization.mp4"), fourcc, 10.0, (W, H), True)
-            for _vis_output in visualized_output:
+            for vidio_frame, _vis_output in zip(vid_frames, visualized_output):
                 frame = _vis_output.get_image()[:, :, ::-1]
                 out.write(frame)
             cap.release()
