@@ -27,6 +27,7 @@ from mask2former import add_maskformer2_config
 from vita import add_vita_config
 from genvis import add_genvis_config
 from predictor import VisualizationDemo
+from moviepy.editor import AudioFileClip, VideoFileClip
 
 def setup_cfg(args):
     # load config from file and command-line arguments
@@ -150,4 +151,10 @@ if __name__ == "__main__":
                 frame_offset += batch_size
                 pbar.update(batch_size)
         cap.release()
-        out.release()
+        if args.output:
+            out.release()
+        # 合并音视频
+        audio = AudioFileClip(args.video_input)
+        video = VideoFileClip(os.path.join(args.output, "visualization.mp4"))
+        video_merge = video.set_audio(audio)
+        video_merge.write_videofile(os.path.join(args.output, "visualization-full.mp4"))

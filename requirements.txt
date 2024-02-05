@@ -6,3 +6,4 @@ h5py
 submitit
 scikit-image
 setuptools
+moviepy
