@@ -30,13 +30,23 @@ docker run --name pytorch2 --gpus all --privileged -v $PWD/conda:/home/condashar
 
 ## 运行方式
 
-运行方式如下：
+我使用的视频分辨率为1920x1080。
+
+使用R50骨架的模型，运行方式如下：
 
 ```shell
 CUDA_VISIBLE_DEVICES=0 python demo/autostereoscopy.py --config-file configs/genvis/ovis/genvis_R50_bs8_online.yaml --video-input /path/to/video --output /path/to/output --opts MODEL.WEIGHTS /path/to/checkpoint_file
 ```
 
+使用Swin-L为骨架的模型，运行方式如下(其实改一下config和模型路径就行)：
+
+```shell
+CUDA_VISIBLE_DEVICES=0 python demo/autostereoscopy.py --config-file configs/genvis/ovis/genvis_SWIN_bs8_online.yaml --video-input /path/to/video --output /path/to/output--save-frames true --opts MODEL.WEIGHTS /path/to/checkpoint_file
+```
+
 这里需要给出单个路径，视频路径、输出文件夹路径和模型路径。
+
+测试了这两个模型，使用Swin-L的效果更好。
 
 以下为原项目的部分README。
 
