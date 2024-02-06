@@ -12,6 +12,8 @@
 2. `demo/predictor.py`文件中增加裸眼3D的适配。
 3. `demo/visualizer.py`文件中实现方法`draw_autostereoscopy`，用于绘制裸眼3D的必要边框。
 
+项目效果展示[点击此处](https://www.bilibili.com/video/BV1xZ421U7M1/)。
+
 ## 环境配置
 
 原项目环境配置可参考：[installation instructions](https://github.com/sukjunhwang/VITA/blob/main/INSTALL.md).
