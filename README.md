@@ -46,7 +46,7 @@ CUDA_VISIBLE_DEVICES=0 python demo/autostereoscopy.py --config-file configs/genv
 CUDA_VISIBLE_DEVICES=0 python demo/autostereoscopy.py --config-file configs/genvis/ovis/genvis_SWIN_bs8_online.yaml --video-input /path/to/video --output /path/to/output--save-frames true --opts MODEL.WEIGHTS /path/to/checkpoint_file
 ```
 
-这里需要给出单个路径，视频路径、输出文件夹路径和模型路径。
+这里需要给出三个路径：视频路径、输出文件夹路径和模型路径。
 
 测试了这两个模型，使用Swin-L的效果更好。
 
